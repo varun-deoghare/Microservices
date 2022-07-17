@@ -1,6 +1,7 @@
 package com.varun.demo.restful.restfulwebservice.controller.helloworld.user;
 
 import com.varun.demo.restful.restfulwebservice.bean.user.Users;
+import com.varun.demo.restful.restfulwebservice.controller.helloworld.exception.UserNotFoundException;
 import com.varun.demo.restful.restfulwebservice.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,11 @@ public class UserController {
 
     @GetMapping("/api/v1/users/{id}")
     public Users getUserId(@PathVariable int id){
-        return userDao.getUserById(id);
+        Users userById = userDao.getUserById(id);
+        if(userById==null){
+            throw new UserNotFoundException("id-"+id);
+        }
+        return userById;
     }
 
     @PostMapping("/api/v1/users/save")
